@@ -1,16 +1,23 @@
 # Weather Conditions, Mortality and Traffic Accidents in Estonia
 
-**Author:** Marta Bogatõr  
-**Project type:** Individual data engineering and analytics project  
-**Status:** Planning and redevelopment
-
 ## Project overview
 
 In this project, I will build an end-to-end data pipeline and analytical dashboard to explore whether weather conditions are associated with weekly mortality and traffic-accident patterns in Estonia.
 
-The analysis will focus on temperature, precipitation and sunshine. Mortality will be examined by sex and age group at the national level. Traffic accidents will be examined by county.
+The analysis may focus on temperature, precipitation and sunshine. Mortality will be examined by sex and age group at the national level. Traffic accidents will be examined by county.
 
 The project is descriptive. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
+
+## Main objective
+
+My objective is to create a reproducible pipeline that:
+
+1. downloads public data from Estonian sources;
+2. stores the source data in PostgreSQL;
+3. cleans and transforms the data with dbt;
+4. validates the data with automated tests;
+5. prepares analysis-ready datasets at a weekly level;
+6. presents the results in an interactive dashboard.
 
 ## Research questions
 
@@ -23,6 +30,16 @@ The project will address the following questions:
 3) Do mortality patterns occur during the same week as hazardous weather conditions?
 
 These questions concern association and comparison, not causality.
+
+## Scope and level of detail
+
+| Subject | Main grain | Available breakdowns |
+|---|---|---|
+| Mortality | ISO week, national level | Sex and age group |
+| Traffic accidents | ISO week and county | Accident, injury and fatality counts |
+| Weather | Day and station initially; ISO week for analysis | Station, county and national level |
+
+The mortality source does not contain a county field. Therefore, mortality and weather can be joined only at the national weekly level. Traffic accidents and weather can be joined at the county-week level.
 
 ## Data sources
 
