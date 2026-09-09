@@ -12,44 +12,23 @@ The analysis will focus on temperature, precipitation and sunshine. Mortality wi
 
 The project is descriptive. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
 
-## Main objective
-
-My objective is to create a reproducible pipeline that:
-
-1. downloads public data from Estonian sources;
-2. stores the source data in PostgreSQL;
-3. cleans and transforms the data with dbt;
-4. validates the data with automated tests;
-5. prepares analysis-ready datasets at a weekly level;
-6. presents the results in an interactive dashboard.
-
 ## Research questions
+
+What patterns and associations exist between weather conditions, traffic accidents, and mortality in Estonia?
 
 The project will address the following questions:
 
-1. How do mortality counts differ between weeks with different weather conditions?
-2. How do traffic-accident, injury and fatality counts differ between weeks with different weather conditions?
-3. Are the observed patterns different across age groups and sexes?
-4. Are traffic and weather patterns different across Estonian counties?
-5. How does a given week compare with the same ISO week in previous years?
+1) Are unusual or hazardous weather conditions associated with increased numbers of traffic accidents and injuries in Estonia?
+2) Does weekly mortality differ between weeks with hazardous and typical weather conditions?
+3) Do mortality patterns occur during the same week as hazardous weather conditions?
 
 These questions concern association and comparison, not causality.
-
-## Scope and level of detail
-
-| Subject | Main grain | Available breakdowns |
-|---|---|---|
-| Mortality | ISO week, national level | Sex and age group |
-| Traffic accidents | ISO week and county | Accident, injury and fatality counts |
-| Weather | Day and station initially; ISO week for analysis | Station, county and national level |
-
-The mortality source does not contain a county field. Therefore, mortality and weather can be joined only at the national weekly level. Traffic accidents and weather can be joined at the county-week level.
 
 ## Data sources
 
 | Source | Dataset | Format | Expected update frequency | Purpose |
 |---|---|---|---|---|
-| Statistics Estonia | RV035 weekly deaths | JSON-stat2 | Weekly | Weekly mortality counts by sex and age group |
+| Statistics Estonia | RV035 weekly deaths | JSON-stat2 | Weekly | Preliminary weekly mortality counts by sex and age group |
 | Estonian Environment Agency / Environmental Portal | Daily climate observations | JSON | Daily or source-dependent | Temperature, precipitation, sunshine and other weather observations by station |
 | Estonian Transport Administration | Personal-injury traffic accidents | CSV | Source-dependent | Accident events and numbers of injured and killed people |
 
@@ -58,32 +37,6 @@ Source links:
 - [Statistics Estonia: RV035](https://andmed.stat.ee/et/stat/rahvastik__rahvastikusundmused__surmad/RV035/table/tableViewLayout2)
 - [Environmental data services](https://keskkonnaportaal.ee/et/avaandmed/keskkonna-ja-ilma-valdkonna-andmeteenused)
 - [Traffic accidents involving personal injury](https://andmed.eesti.ee/datasets/inimkannatanutega-liiklusonnetuste-andmed)
-
-## Planned analytical measures
-
-### Mortality
-
-- weekly death count;
-- average death count for the same ISO week in earlier years;
-- difference between the current value and the historical same-week average.
-
-### Traffic accidents
-
-- weekly accident count;
-- weekly number of injured people;
-- weekly number of fatalities;
-- corresponding historical same-week averages and differences.
-
-### Weather
-
-- average, minimum and maximum temperature;
-- total precipitation;
-- total sunshine duration;
-- average wind speed, if coverage is sufficient;
-- number of unusually hot or cold days;
-- corresponding historical same-week averages and differences.
-
-The exact thresholds for extreme weather will be treated as configurable analytical rules. They must be documented and validated before being used in the dashboard.
 
 ## Planned architecture
 
