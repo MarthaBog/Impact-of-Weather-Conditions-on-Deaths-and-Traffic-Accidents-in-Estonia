@@ -1,16 +1,12 @@
 # Weather Conditions, Mortality and Traffic Accidents in Estonia
 
-**Author:** Marta Bogatõr  
-**Project type:** Individual data engineering and analytics project  
-**Status:** Planning and redevelopment
-
 ## Project overview
 
 In this project, I will build an end-to-end data pipeline and analytical dashboard to explore whether weather conditions are associated with weekly mortality and traffic-accident patterns in Estonia.
 
-The analysis will focus on temperature, precipitation and sunshine. Mortality will be examined by sex and age group at the national level. Traffic accidents will be examined by county.
+The analysis may focus on temperature, precipitation and sunshine. Mortality will be examined by sex and age group at the national level. Traffic accidents will be examined by county.
 
-The project is descriptive. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
+The project is **descriptive**. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
 
 ## Main objective
 
