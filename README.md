@@ -31,6 +31,22 @@ The project will address the following questions:
 
 These questions concern association and comparison, not causality.
 
+## Architecture 
+
+```mermaid
+flowchart LR
+source[Statistikaamet]  --> ingest[Python]
+source2[Keskkonnaagentuur] --> ingest[Python]
+source3[Transpordiamet] --> ingest[Python]
+    ingest --> staging[(PostgreSQL)]
+    staging --> transform[dbt transformatsioon]
+    transform --> mart[(PostgreSQL)]
+    mart --> dashboard[Superset]
+    mart --> quality[dbt andmekvaliteedi testid]
+    scheduler[Cron] --> ingest
+```
+
+
 ## Scope and level of detail
 
 | Subject | Main grain | Available breakdowns |
