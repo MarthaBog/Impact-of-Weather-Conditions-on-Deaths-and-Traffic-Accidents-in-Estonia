@@ -8,11 +8,9 @@ The analysis may focus on temperature, precipitation and sunshine. Mortality wil
 
 The project is descriptive. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
 
-## Research questions
+### Research questions
 
 What patterns and associations exist between weather conditions, traffic accidents, and mortality in Estonia?
-
-The project will address the following questions:
 
 1) Are unusual or hazardous weather conditions associated with increased numbers of traffic accidents in Estonia?
 2) Does weekly mortality differ between weeks with hazardous and typical weather conditions?
@@ -20,31 +18,7 @@ The project will address the following questions:
 
 These questions concern association and comparison, not causality.
 
-## Scope and level of detail
-
-| Subject | Main grain | Available breakdowns |
-|---|---|---|
-| Mortality | ISO week, national level | Sex and age group |
-| Traffic accidents | ISO week and county | Accident, injury and fatality counts |
-| Weather | Day and station initially; ISO week for analysis | Station, county and national level |
-
-The mortality source does not contain a county field. Therefore, mortality and weather can be joined only at the national weekly level. Traffic accidents and weather can be joined at the county-week level.
-
-## Data sources
-
-| Source | Dataset | Format | Expected update frequency | Purpose |
-|---|---|---|---|---|
-| Statistics Estonia | RV035 weekly deaths | JSON-stat2 | Weekly | Preliminary weekly mortality counts by sex and age group |
-| Estonian Environment Agency / Environmental Portal | Daily climate observations | JSON | Daily or source-dependent | Temperature, precipitation, sunshine and other weather observations by station |
-| Estonian Transport Administration | Personal-injury traffic accidents | CSV | Source-dependent | Accident events and numbers of injured and killed people |
-
-Source links:
-
-- [Statistics Estonia: RV035](https://andmed.stat.ee/et/stat/rahvastik__rahvastikusundmused__surmad/RV035/table/tableViewLayout2)
-- [Environmental data services](https://keskkonnaportaal.ee/et/avaandmed/keskkonna-ja-ilma-valdkonna-andmeteenused)
-- [Traffic accidents involving personal injury](https://andmed.eesti.ee/datasets/inimkannatanutega-liiklusonnetuste-andmed)
-
-## Planned architecture
+### Architecture
 
 ```mermaid
 flowchart LR
@@ -57,9 +31,24 @@ flowchart LR
     H[Scheduler] --> B
 ```
 
+### Data sources
+
+| Source | Dataset | Format | Expected update frequency | Purpose |
+|---|---|---|---|---|
+| Statistics Estonia | RV035 weekly deaths | JSON-stat2 | Weekly | Preliminary weekly mortality counts by sex and age group |
+| Estonian Environment Agency / Environmental Portal | Daily climate observations | JSON | Daily | Temperature, precipitation, sunshine and other weather observations by station |
+| Estonian Transport Administration | Personal-injury traffic accidents | CSV | Weekly | Accident events and numbers of injured and killed people |
+
+Source links:
+
+- [Statistics Estonia: RV035](https://andmed.stat.ee/et/stat/rahvastik__rahvastikusundmused__surmad/RV035/table/tableViewLayout2)
+- [Environmental data services](https://keskkonnaportaal.ee/et/avaandmed/keskkonna-ja-ilma-valdkonna-andmeteenused)
+- [Traffic accidents involving personal injury](https://andmed.eesti.ee/datasets/inimkannatanutega-liiklusonnetuste-andmed)
+
+
 A detailed description and the reasoning behind each component are available in [docs/architecture.md](docs/architecture.md).
 
-## Planned technology stack
+### Tools
 
 | Responsibility | Technology | Reason for using it |
 |---|---|---|
@@ -71,7 +60,7 @@ A detailed description and the reasoning behind each component are available in 
 | Data quality | dbt tests | Detects missing values, duplicates, invalid ranges and grain violations |
 | Visualisation | Apache Superset | Provides an open-source dashboard connected to PostgreSQL |
 
-## Planned repository structure
+### Repository structure
 
 ```text
 .
@@ -110,14 +99,14 @@ The planned execution order is:
 
 The pipeline should stop when a critical ingestion, transformation or test step fails. A failed source load must not silently produce a dashboard that appears current.
 
-## Data-model layers
+### Data-model layers
 
 - **Raw:** source data stored with minimal changes and ingestion metadata.
 - **Staging:** renamed and typed fields, normalized labels and source-specific cleaning.
 - **Intermediate:** station-to-county mapping, daily and weekly aggregations, and historical comparison logic.
 - **Marts:** reusable dimensions and facts plus final datasets designed for the dashboard.
 
-## Data-quality principles
+### Data-quality principles
 
 The project will include checks for:
 
@@ -129,13 +118,13 @@ The project will include checks for:
 - weather-station and county mapping coverage;
 - source freshness and incomplete current periods.
 
-## Privacy and security
+### Privacy and security
 
 The project uses public statistical and event data. It does not require names, personal identification codes, home addresses or other direct personal identifiers.
 
 Credentials and connection settings will be stored in a local `.env` file. Only `.env.example`, containing placeholder values, may be committed. The real `.env` file, database files, logs and generated build artifacts must remain outside version control.
 
-## Limitations
+### Limitations
 
 - The analysis is observational and cannot establish causality.
 - Mortality data cannot be analysed by county with the selected source.
@@ -145,14 +134,4 @@ Credentials and connection settings will be stored in a local `.env` file. Only 
 - Weekly aggregation can hide short-lived weather events.
 - Associations may be affected by seasonality, population change and other confounding factors.
 
-## Success criteria
-
-I will consider the first version complete when:
-
-- the project can be started from documented instructions;
-- all three sources load reproducibly;
-- dbt builds both final analytical marts;
-- critical data-quality tests pass;
-- the dashboard uses the validated marts;
-- the limitations and analytical definitions are documented.
 
