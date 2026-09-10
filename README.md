@@ -82,7 +82,7 @@ A detailed description and the reasoning behind each component are available in 
 ├── scripts/                  # Python ingestion scripts
 ├── seeds/                    # Small static reference datasets
 ├── tests/                    # Custom data-quality tests
-└── dashboard/                # Dashboard export and related documentation
+└── superset_exports/         # Dashboard export and related documentation
 ```
 
 Generated logs and dbt build artifacts will not be committed to the repository.

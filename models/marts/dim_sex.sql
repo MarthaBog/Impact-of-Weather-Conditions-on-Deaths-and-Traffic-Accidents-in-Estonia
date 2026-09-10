@@ -1,22 +1,26 @@
 with sexes as (
-    select distinct sex_label
-    from {{ ref('stg_surmad') }}
+    select distinct sex
+    from {{ ref('stg_deaths') }}
 )
+
 select
     row_number() over (
         order by
-            case sex_label
-                when 'Mehed ja naised' then 1
-                when 'Mehed' then 2
-                when 'Naised' then 3
+            case sex
+                when 'All' then 1
+                when 'Male' then 2
+                when 'Female' then 3
                 else 99
             end
     ) as sex_key,
+
     case
-        when sex_label = 'Mehed ja naised' then 'all'
-        when sex_label = 'Mehed' then 'male'
-        when sex_label = 'Naised' then 'female'
-        else lower(sex_label)
+        when sex = 'All' then 'all'
+        when sex = 'Male' then 'male'
+        when sex = 'Female' then 'female'
+        else lower(sex)
     end as sex_code,
-    sex_label
+
+    sex
+
 from sexes

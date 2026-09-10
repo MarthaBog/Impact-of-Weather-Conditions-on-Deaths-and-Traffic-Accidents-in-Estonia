@@ -42,7 +42,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: age_group_label
+      - name: age_group
         tests:
           - unique
           - not_null
@@ -59,7 +59,7 @@ models:
           - not_null
           - accepted_values:
               values: ['all', 'male', 'female']
-      - name: sex_label
+      - name: sex
         tests:
           - unique
           - not_null

@@ -28,9 +28,9 @@ Faktid ja dimensioonid on ehitusplokid, millest saab vajadusel ka jooksvalt pär
 
 Pythoni skriptid laevad andmed toortabelitesse:
 
-- `raw.surmad`
-- `raw.onnetused`
-- `raw.ilm`
+- `raw.deaths`
+- `raw.traffic_accidents`
+- `raw.weather`
 
 dbt käsitleb neid `source('raw', ...)` objektidena. Selles kihis ei tehta äriloogikat dbt-s.
 
@@ -38,20 +38,20 @@ dbt käsitleb neid `source('raw', ...)` objektidena. Selles kihis ei tehta äril
 
 Staging kiht puhastab, muudab väljade tüüpe ja ühtlustab toorandmed järgmistele kihtidele sobivaks.
 
-- `stg_surmad`
+- `stg_deaths`
   - teisendab aasta ja nädala ISO kujule
   - jätab alles ainult read, kus `"Näitaja" = 'Surmade arv'`
   - eemaldab read `"Nädalad kokku"`
   - eemaldab `NaN` väärtused
   - tulemus: `nädal x sugu x vanuserühm`
 
-- `stg_onnetused`
+- `stg_traffic_accidents`
   - muudab kuupäeva ja kella tüübid
   - normaliseerib maakonna nime
   - arvutab ISO aasta, ISO nädala ja `week_key`
   - tulemus: üks rida ühe liiklusõnnetuse kohta
 
-- `stg_ilm`
+- `stg_weather`
   - muudab jaamade, kuupäevade ja mõõdikute tüübid
   - filtreerib välja ainult projekti jaoks vajalikud ilmamõõdikud
   - arvutab ISO aasta, ISO nädala ja `week_key`
@@ -65,25 +65,25 @@ Intermediate kiht viib eri allikad ühele analüütilisele tasemele, peamiselt n
 
 #### Ilma mudelid
 
-- `int_ilm_daily_station`
+- `int_weather_daily_station`
   - pivotib pika formaadi ilmamõõtmised laia formaati
   - tulemus: `jaam x päev`
 
-- `int_ilm_daily_county`
+- `int_weather_daily_county`
   - seob ilmajaamad maakondadega kasutades `station_county_map`
   - arvutab ühe päeva kohta maakonna keskmise üle kõigi maakonna jaamade
   - tulemus: `maakond x päev`
 
-- `int_ilm_weekly_station`
+- `int_weather_weekly_station`
   - koondab jaamapõhised ilmaandmed nädalaks
   - tulemus: `jaam x nädal`
 
-- `int_ilm_weekly_county`
+- `int_weather_weekly_county`
   - koondab maakonnapõhised päeva ilmaandmed nädalaks
   - arvutab keskmise temperatuuri, summaarse sademete hulga, summaarse päikesepaiste hulga, tuule keskmise ning äärmuslike päevade loendurid
   - tulemus: `maakond x nädal`
 
-- `int_ilm_weekly_national`
+- `int_weather_weekly_national`
   - arvutab riikliku nädala taseme ilmaandmed maakond x päev ridade pealt
   - tulemus: `nädal`
 
@@ -91,22 +91,22 @@ Riiklik ilm ei tule otse jaamadest, vaid maakond x päev agregeerimise kaudu.
 
 #### Liikluse mudelid
 
-- `int_onnetused_weekly_county`
+- `int_traffic_accidents_weekly_county`
   - loendab õnnetuste arvu ning summeerib vigastatute ja hukkunute arvu
   - tulemus: `maakond x nädal`
 
 #### Ajaloolise võrdluse mudelid
 
-- `int_surmad_weekly_hist`
+- `int_deaths_weekly_history`
   - tulemus: `nädal x vanuserühm x sugu`
 
-- `int_onnetused_weekly_county_hist`
+- `int_traffic_accidents_weekly_county_history`
   - tulemus: `maakond x nädal`
 
-- `int_ilm_weekly_county_hist`
+- `int_weather_weekly_county_history`
   - tulemus: `maakond x nädal`
 
-- `int_ilm_weekly_national_hist`
+- `int_weather_weekly_national_history`
   - tulemus: `nädal`
 
 Kõigis `*_hist` mudelites kasutatakse sama põhimõtet: sama ISO nädala varasemate aastate keskmine. See ei ole põhjuslik mudel ega standardiseeritud anomaalia, vaid lihtne ajalooline võrdlusbaas.
@@ -178,15 +178,15 @@ Tulpade kirjeldused:
 
 Maakondlik ilm:
 
-1. `stg_ilm` valib vajalikud mõõdikud ja tüübid.
-2. `int_ilm_daily_station` teeb jaamapõhise päevarea.
-3. `int_ilm_daily_county` keskmistab sama maakonna jaamade päevased mõõtmised.
-4. `int_ilm_weekly_county` koondab maakonnapäevad nädalaks.
+1. `stg_weather` valib vajalikud mõõdikud ja tüübid.
+2. `int_weather_daily_station` teeb jaamapõhise päevarea.
+3. `int_weather_daily_county` keskmistab sama maakonna jaamade päevased mõõtmised.
+4. `int_weather_weekly_county` koondab maakonnapäevad nädalaks.
 
 Riiklik ilm:
 
-1. aluseks on `int_ilm_daily_county`
-2. `int_ilm_weekly_national` agregeerib maakondade päevased andmed riiklikuks nädalaks
+1. aluseks on `int_weather_daily_county`
+2. `int_weather_weekly_national` agregeerib maakondade päevased andmed riiklikuks nädalaks
 
 ## Piirangud
 

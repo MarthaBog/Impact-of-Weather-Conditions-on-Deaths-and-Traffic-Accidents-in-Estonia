@@ -2,81 +2,130 @@ version: 2
 
 sources:
   - name: raw
-    description: Raw tables loaded by the ingestion scripts.
+    description: Source tables loaded by the Python ingestion scripts.
     schema: public
+
     tables:
-      - name: surmad
-        description: Weekly deaths by year, week, sex, and age group.
-      - name: onnetused
-        description: Traffic accident events with date, county, injuries, and deaths.
-      - name: ilm
-        description: Daily weather observations in long format by station and metric.
+      - name: deaths
+        description: Weekly mortality data by year, week, sex and age group.
+
+      - name: traffic_accidents
+        description: Individual personal-injury traffic accidents.
+
+      - name: weather
+        description: Daily weather observations by station and metric.
 
 models:
-  - name: stg_surmad
-    description: Clean weekly deaths source with typed ISO week fields.
+  - name: stg_deaths
+    description: >
+      Clean weekly mortality counts with English category names and
+      ISO-week fields.
+
     columns:
       - name: week_key
         tests:
           - not_null
+
       - name: iso_year
         tests:
           - not_null
+
       - name: iso_week
         tests:
           - not_null
-      - name: sex_label
+
+      - name: sex
         tests:
           - not_null
-      - name: age_group_label
+          - accepted_values:
+              values:
+                - All
+                - Male
+                - Female
+
+      - name: age_group
         tests:
           - not_null
+          - accepted_values:
+              values:
+                - All
+                - 0-64
+                - 65-79
+                - 80 and older
+
       - name: deaths_count
         tests:
           - not_null
-  - name: stg_onnetused
-    description: Clean traffic accident events with parsed date and normalized county name.
+
+  - name: stg_traffic_accidents
+    description: >
+      Clean traffic-accident events with normalized counties and
+      ISO-week fields.
+
     columns:
       - name: accident_id
         tests:
           - unique
           - not_null
-      - name: date_day
+
+      - name: accident_date
         tests:
           - not_null
-      - name: county_name
+
+      - name: county
         tests:
           - not_null
+
       - name: iso_year
         tests:
           - not_null
+
       - name: iso_week
         tests:
           - not_null
+
+      - name: week_key
+        tests:
+          - not_null
+
       - name: killed_count
         tests:
           - not_null
+
       - name: injured_count
         tests:
           - not_null
-  - name: stg_ilm
-    description: Typed daily weather observations filtered to the core project metrics.
+
+  - name: stg_weather
+    description: >
+      Clean daily weather observations restricted to the metrics
+      required by the project.
+
     columns:
       - name: station_code
         tests:
           - not_null
-      - name: date_day
+
+      - name: observation_date
         tests:
           - not_null
+
       - name: iso_year
         tests:
           - not_null
+
       - name: iso_week
         tests:
           - not_null
+
+      - name: week_key
+        tests:
+          - not_null
+
       - name: metric_name
         tests:
           - not_null
+
       - name: metric_value
         tests:
           - not_null

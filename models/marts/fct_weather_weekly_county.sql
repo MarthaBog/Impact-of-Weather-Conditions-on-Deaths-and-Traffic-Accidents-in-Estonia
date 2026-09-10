@@ -1,17 +1,21 @@
 select
     weeks.week_key,
-    county.county_key,
-    weather.avg_temp,
-    weather.avg_max_temp,
-    weather.avg_min_temp,
-    weather.total_precip,
-    weather.avg_wind,
-    weather.total_sunshine,
+    counties.county_key,
+    weather.average_temperature,
+    weather.maximum_temperature,
+    weather.minimum_temperature,
+    weather.total_precipitation,
+    weather.average_wind_speed,
+    weather.total_sunshine_duration,
     weather.hot_day_count,
     weather.cold_day_count,
-    weather.observed_day_count
-from {{ ref('int_ilm_weekly_county') }} as weather
-join {{ ref('dim_week') }} as weeks
-  on weather.week_key = weeks.week_key
-join {{ ref('dim_county') }} as county
-  on weather.county_name = county.county_name
+    weather.observed_day_count,
+    weather.maximum_station_count
+
+from {{ ref('int_weather_weekly_county') }} as weather
+
+inner join {{ ref('dim_week') }} as weeks
+    on weather.week_key = weeks.week_key
+
+inner join {{ ref('dim_county') }} as counties
+    on weather.county_name = counties.county_name
