@@ -8,24 +8,13 @@ The analysis may focus on temperature, precipitation and sunshine. Mortality wil
 
 The project is descriptive. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
 
-## Main objective
-
-My objective is to create a reproducible pipeline that:
-
-1. downloads public data from Estonian sources;
-2. stores the source data in PostgreSQL;
-3. cleans and transforms the data with dbt;
-4. validates the data with automated tests;
-5. prepares analysis-ready datasets at a weekly level;
-6. presents the results in an interactive dashboard.
-
 ## Research questions
 
 What patterns and associations exist between weather conditions, traffic accidents, and mortality in Estonia?
 
 The project will address the following questions:
 
-1) Are unusual or hazardous weather conditions associated with increased numbers of traffic accidents and injuries in Estonia?
+1) Are unusual or hazardous weather conditions associated with increased numbers of traffic accidents in Estonia?
 2) Does weekly mortality differ between weeks with hazardous and typical weather conditions?
 3) Do mortality patterns occur during the same week as hazardous weather conditions?
 
