@@ -27,6 +27,18 @@ select
     avg(cold_county_day_count) over history_window
         as cold_county_day_count_historical_average,
 
+    stddev_samp(average_temperature) over history_window
+        as average_temperature_historical_stddev,
+
+    stddev_samp(total_precipitation) over history_window
+        as total_precipitation_historical_stddev,
+
+    stddev_samp(total_sunshine_duration) over history_window
+        as total_sunshine_duration_historical_stddev,
+
+    stddev_samp(average_wind_speed) over history_window
+        as average_wind_speed_historical_stddev,
+
     count(*) over history_window
         as historical_year_count
 

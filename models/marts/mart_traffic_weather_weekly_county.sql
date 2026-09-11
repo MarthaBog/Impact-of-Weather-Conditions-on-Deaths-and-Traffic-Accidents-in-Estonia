@@ -94,8 +94,44 @@ select
         - weather_history.total_sunshine_duration_historical_average
         as sunshine_difference_from_historical_average,
 
-    weather_history.historical_year_count
-        as weather_historical_year_count
+        weather_history.historical_year_count
+        as weather_historical_year_count,
+
+    case
+        when weather_history.historical_year_count < 3
+            or weather.average_temperature is null
+            or weather_history.average_temperature_historical_stddev is null
+            or weather_history.total_precipitation_historical_stddev is null
+            or weather_history.total_sunshine_duration_historical_stddev is null
+            or weather_history.average_wind_speed_historical_stddev is null
+        then 'Insufficient history'
+
+        when abs(
+            weather.average_temperature
+            - weather_history.average_temperature_historical_average
+        ) > 2 * weather_history.average_temperature_historical_stddev
+        then 'Unusual'
+
+        when abs(
+            weather.total_precipitation
+            - weather_history.total_precipitation_historical_average
+        ) > 2 * weather_history.total_precipitation_historical_stddev
+        then 'Unusual'
+
+        when abs(
+            weather.total_sunshine_duration
+            - weather_history.total_sunshine_duration_historical_average
+        ) > 2 * weather_history.total_sunshine_duration_historical_stddev
+        then 'Unusual'
+
+        when abs(
+            weather.average_wind_speed
+            - weather_history.average_wind_speed_historical_average
+        ) > 2 * weather_history.average_wind_speed_historical_stddev
+        then 'Unusual'
+
+        else 'Typical'
+    end as weather_type
 
 from {{ ref('fct_traffic_weekly_county') }} as traffic
 

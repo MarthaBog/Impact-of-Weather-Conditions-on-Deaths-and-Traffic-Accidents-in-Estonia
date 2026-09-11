@@ -67,5 +67,39 @@ services:
       db:
         condition: service_healthy
 
+  superset:
+    build:
+      context: .
+      dockerfile: docker/superset.Dockerfile
+    container_name: weather-impact-superset
+    env_file:
+      - .env
+    environment:
+      SUPERSET_CONFIG_PATH: /app/superset_config.py
+      DATABASE_URI: sqlite:////app/superset_home/superset.db
+      SECRET_KEY: ${SUPERSET_SECRET_KEY}
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./superset_config.py:/app/superset_config.py
+      - superset_home:/app/superset_home
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - /bin/sh
+      - -c
+      - |
+        superset db upgrade &&
+        superset fab create-admin \
+          --username ${SUPERSET_ADMIN_USERNAME} \
+          --firstname Admin \
+          --lastname User \
+          --email admin@example.com \
+          --password ${SUPERSET_ADMIN_PASSWORD} || true
+        superset init
+        superset run -h 0.0.0.0 -p 8088
+
 volumes:
   postgres_data:
+  superset_home:
