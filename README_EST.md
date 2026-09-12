@@ -133,7 +133,7 @@ Paigalda: Docker Desktop
 
 ```bash 
 git clone https://github.com/MarthaBog/Impact-of-Weather-Conditions-on-Deaths-and-Traffic-Accidents-in-Estonia.git
-cd folder where is downloaded file is
+cd #the path of the downloaded folder
 ```
 
 2. Käivita projekt (for Windows only):
