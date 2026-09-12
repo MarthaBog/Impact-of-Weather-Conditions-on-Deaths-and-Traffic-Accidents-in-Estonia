@@ -4,17 +4,15 @@
 
 In this project, I will build an end-to-end data pipeline and analytical dashboard to explore whether weather conditions are associated with weekly mortality and traffic-accident patterns in Estonia.
 
-The analysis may focus on temperature, precipitation and sunshine. Mortality will be examined by sex and age group at the national level. Traffic accidents will be examined by county.
-
 The project is descriptive. It may reveal patterns and statistical associations, but it will not establish that weather causes changes in mortality or traffic accidents.
 
-### Research questions
+## The project investigates the following main question:
 
 What patterns and associations exist between weather conditions, traffic accidents, and mortality in Estonia?
 
-1) Are unusual or hazardous weather conditions associated with increased numbers of traffic accidents in Estonia?
-2) Does weekly mortality differ between weeks with hazardous and typical weather conditions?
-3) Do mortality patterns occur during the same week as hazardous weather conditions?
+1. Are unusual weather conditions associated with increased numbers of traffic accidents in Estonia?
+2. Does weekly mortality differ between weeks with unusual and typical weather conditions?
+3. Do mortality patterns occur during the same periods as unusual weather conditions?
 
 These questions concern association and comparison, not causality.
 
@@ -24,11 +22,16 @@ These questions concern association and comparison, not causality.
 flowchart LR
     A[Public data APIs] --> B[Python ingestion]
     B --> C[(PostgreSQL raw tables)]
+
     C --> D[dbt transformations]
     D --> E[(Analytics marts)]
-    E --> F[Dashboard]
+    E --> F[Apache Superset dashboard]
+
     D --> G[dbt tests]
-    H[Scheduler] --> B
+
+    H[Pipeline orchestrator] --> B
+    H --> D
+    H --> G
 ```
 
 ### Data sources
@@ -56,7 +59,7 @@ A detailed description and the reasoning behind each component are available in 
 | Data ingestion | Python | Supports API requests, CSV/JSON parsing and database loading |
 | Data storage | PostgreSQL | Stores raw and transformed relational data |
 | Data transformation | dbt and SQL | Makes transformation logic modular, documented and testable |
-| Orchestration | A lightweight scheduler | Runs ingestion, transformation and tests in the correct order |
+| Orchestration | Python pipeline orchestrator | Runs ingestion, transformation and tests in the correct order |
 | Data quality | dbt tests | Detects missing values, duplicates, invalid ranges and grain violations |
 | Visualisation | Apache Superset | Provides an open-source dashboard connected to PostgreSQL |
 
@@ -64,73 +67,101 @@ A detailed description and the reasoning behind each component are available in 
 
 ```text
 .
-├── README.md                  # Project overview and setup instructions
-├── compose.yml               # Local service definitions
-├── .env.example              # Required environment-variable names only
-├── dbt_project.yml           # dbt project configuration
-├── profiles.yml              # dbt connection configuration
-├── docker/                   # Custom container images
-├── docs/
-│   ├── architecture.md       # Architecture and design decisions
-│   └── transformation.md     # Model grains and transformation rules
-├── macros/                   # Reusable dbt SQL macros
+├── README.md                  # Project overview, results and setup instructions
+├── compose.yml                # Docker Compose service definitions
+├── .env.example               # Example environment configuration
+├── dbt-requirements.txt       # Python dependencies required by dbt
+├── dbt_project.yml            # dbt project configuration
+├── profiles.yml               # dbt PostgreSQL connection configuration
+├── superset_config.py         # Local Apache Superset configuration
+├── docker/                    # Custom Docker images and container configuration
+├── docs/                      # Additional project documentation
+├── macros/                    # Reusable dbt SQL macros
 ├── models/
-│   ├── staging/              # Type conversion and source cleaning
-│   ├── intermediate/         # Alignment and weekly aggregation
-│   └── marts/                # Dimensions, facts and final analytical tables
-├── orchestrator/             # Scheduling and pipeline execution
-├── scripts/                  # Python ingestion scripts
-├── seeds/                    # Small static reference datasets
-├── tests/                    # Custom data-quality tests
-└── superset_exports/         # Dashboard export and related documentation
+│   ├── staging/               # Source cleaning and type standardisation
+│   ├── intermediate/          # Historical calculations and weekly aggregation
+│   └── marts/                 # Facts, dimensions and analytical marts
+├── orchestrator/              # Pipeline orchestration logic
+├── scripts/                   # Python data-ingestion scripts
+├── seeds/                     # Small static reference datasets
+├── tests/                     # Custom dbt data-quality tests
+└── superset_exports/          # Exported Superset dashboard ZIP files
 ```
 
-Generated logs and dbt build artifacts will not be committed to the repository.
+Generated logs, temporary files and dbt build artifacts such as `target/` are not committed to the repository.
 
 ## Data pipeline
 
-The planned execution order is:
+The pipeline runs in the following order:
 
 1. load or refresh the three source datasets;
 2. load static reference data with `dbt seed`;
 3. run dbt transformations;
 4. run dbt data-quality tests;
-5. make the validated marts available to the dashboard.
+5. make the validated analytical marts available to Apache Superset.
 
-The pipeline should stop when a critical ingestion, transformation or test step fails. A failed source load must not silently produce a dashboard that appears current.
+The pipeline stops if a critical ingestion, transformation or test step fails. This prevents failed or incomplete source loads from silently producing analytical results that appear current.
 
 ### Data-model layers
 
-- **Raw:** source data stored with minimal changes and ingestion metadata.
+- **Raw:** source data stored with minimal transformation before analytical processing.
 - **Staging:** renamed and typed fields, normalized labels and source-specific cleaning.
-- **Intermediate:** station-to-county mapping, daily and weekly aggregations, and historical comparison logic.
-- **Marts:** reusable dimensions and facts plus final datasets designed for the dashboard.
+- **Intermediate:** daily and weekly aggregations, geographic alignment, historical averages and deviation calculations.
+- **Marts:** reusable fact and dimension models together with final analytical datasets used by the dashboard.
 
 ### Data-quality principles
 
-The project will include checks for:
+The project includes checks for:
 
 - required fields and valid data types;
 - duplicate natural keys;
 - valid ISO week and date ranges;
 - non-negative counts and measurements where applicable;
-- uniqueness of every model's declared grain;
+- uniqueness of the declared model grain;
 - weather-station and county mapping coverage;
-- source freshness and incomplete current periods.
+- validity of joins between dimensions, facts and analytical models;
+- incomplete or insufficient historical periods used in weather comparisons.
+
+### Dashboard Superset
+
+#### Running the project locally
+
+Install: Docker Desktop
+
+1. Download the project
+
+2. In terminal (for Windows only):
+```bash
+copy .env.example .env
+docker compose up -d db
+docker compose run --rm pipeline  # Run the full data pipeline
+docker compose up -d --build superset
+```
+Open http://localhost:8088  <!-- passwords in .env
+
+Import the dashboard:
+Dashboards - Import dashboard - Select the dashboard ZIP file from superset_exports/
+docker compose down  --- Stop the project
+
+## **Conclusion**
+
+Across all available years (2020–2026), unusual weather conditions were not consistently associated with higher traffic accident counts or higher weekly mortality. Differences between typical and unusual weather varied by month, and the observed associations were not strong or consistent enough to conclude that weather conditions have a strong impact on traffic accidents or mortality.
+
+![alt text](image-3.png)
 
 ### Privacy and security
 
 The project uses public statistical and event data. It does not require names, personal identification codes, home addresses or other direct personal identifiers.
 
-Credentials and connection settings will be stored in a local `.env` file. Only `.env.example`, containing placeholder values, may be committed. The real `.env` file, database files, logs and generated build artifacts must remain outside version control.
+Credentials and connection settings are stored in a local `.env` file. Only `.env.example`, containing placeholder values, may be committed. The real `.env` file, database files, logs and generated build artifacts must remain outside version control.
 
 ### Limitations
 
 - The analysis is observational and cannot establish causality.
 - Mortality data cannot be analysed by county with the selected source.
 - Weather-station coverage may differ between counties and periods.
-- Recent mortality values may be preliminary.
-- A short historical period may make same-week averages unstable.
+- Recent mortality values are preliminary.
+- A limited historical period may make same-week averages unstable.
 - Weekly aggregation can hide short-lived weather events.
 - Associations may be affected by seasonality, population change and other confounding factors.
 
