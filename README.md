@@ -152,6 +152,9 @@ Across all available years (2020–2026), unusual weather conditions were not co
 
 ![Dashboard](dashboard_image.png)
 
+<img width="3424" height="1143" alt="dashboard_image" src="https://github.com/user-attachments/assets/e953de3e-fa53-4c59-90ee-e39cde31a52d" />
+
+
 ### Privacy and security
 
 The project uses public statistical and event data. It does not require names, personal identification codes, home addresses or other direct personal identifiers.
