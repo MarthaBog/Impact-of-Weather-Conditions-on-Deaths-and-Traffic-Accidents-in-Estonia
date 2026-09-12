@@ -1,4 +1,4 @@
-# Weather Conditions, Mortality and Traffic Accidents in Estonia
+# Ilmastikutingimused, suremus ja liiklusõnnetused Eestis
 
 ## Projekti ülevaade
 
