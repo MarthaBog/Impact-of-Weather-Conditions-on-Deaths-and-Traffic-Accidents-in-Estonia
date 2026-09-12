@@ -50,35 +50,35 @@ Allikate lingid:
 
 ### Tööriistad
 
-| Vastutusala | Technology | Kasutamise põhjus |
+| Valdkond | Tehnoloogia | Kasutamise põhjus |
 |---|---|---|
-| Vastutusala
-
-Technology
-
-Kasutamise põhjus
-
-Keskkond ja teenused | Docker Compose | Muudab projekti korratavaks ja hoiab teenused eraldatuna |
-| Andmete laadimine | Python | Toetab API päringuid, CSV/JSON töötlemist ja andmete laadimist andmebaasi |
-| Andmete salvestaminee | PostgreSQL | Salvestab toorandmed ja teisendatud relatsioonilised andmed |
-| Andmete transformatsioon | dbt and SQL | Muudab teisendusloogika modulaarseks, dokumenteerituks ja testitavaks |
+| Keskkond ja teenused | Docker Compose | Muudab projekti korratavaks ja hoiab teenused eraldatuna |
+| Andmete laadimine | Python | Toetab API-päringuid, CSV/JSON-i töötlemist ja andmete laadimist andmebaasi |
+| Andmete salvestamine | PostgreSQL | Salvestab toorandmed ja teisendatud relatsioonilised andmed |
+| Andmete transformatsioon | dbt ja SQL | Muudab teisendusloogika modulaarseks, dokumenteerituks ja testitavaks |
 | Orkestreerimine | Python pipeline orchestrator | Käivitab andmete laadimise, teisendused ja testid õiges järjekorras |
-| Andmekvaliteet | dbt tests | Tuvastab puuduvad väärtused, duplikaadid, vigased vahemikud ja grain'i rikkumised |
-| Visualiseerimine | Apache Superset | Pakub avatud lähtekoodiga dashboardi, mis on ühendatud PostgreSQL-ga |
+| Andmekvaliteet | dbt tests | Tuvastab puuduvad väärtused, duplikaadid, vigased vahemikud ja grain’i rikkumised |
+| Visualiseerimine | Apache Superset | Pakub avatud lähtekoodiga dashboard’i, mis on ühendatud PostgreSQL-iga |
+
 
 ### Repositooriumi struktuur
 
 ```text
 .
 ├── README.md                  # Project overview, results and setup instructions
+├── README_EST.md              # Project documentation in Estonian
+├── dashboard_image.png        # Dashboard preview image
 ├── compose.yml                # Docker Compose service definitions
 ├── .env.example               # Example environment configuration
+├── .gitignore                 # Files and directories excluded from Git
+├── .dockerignore              # Files excluded from Docker build context
+├── .gitattributes             # Git attributes configuration
 ├── dbt-requirements.txt       # Python dependencies required by dbt
 ├── dbt_project.yml            # dbt project configuration
 ├── profiles.yml               # dbt PostgreSQL connection configuration
 ├── superset_config.py         # Local Apache Superset configuration
+├── init.sh                    # Project initialisation script
 ├── docker/                    # Custom Docker images and container configuration
-├── docs/                      # Additional project documentation
 ├── macros/                    # Reusable dbt SQL macros
 ├── models/
 │   ├── staging/               # Source cleaning and type standardisation

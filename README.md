@@ -66,14 +66,19 @@ Source links:
 ```text
 .
 ├── README.md                  # Project overview, results and setup instructions
+├── README_EST.md              # Project documentation in Estonian
+├── dashboard_image.png        # Dashboard preview image
 ├── compose.yml                # Docker Compose service definitions
 ├── .env.example               # Example environment configuration
+├── .gitignore                 # Files and directories excluded from Git
+├── .dockerignore              # Files excluded from Docker build context
+├── .gitattributes             # Git attributes configuration
 ├── dbt-requirements.txt       # Python dependencies required by dbt
 ├── dbt_project.yml            # dbt project configuration
 ├── profiles.yml               # dbt PostgreSQL connection configuration
 ├── superset_config.py         # Local Apache Superset configuration
+├── init.sh                    # Project initialisation script
 ├── docker/                    # Custom Docker images and container configuration
-├── docs/                      # Additional project documentation
 ├── macros/                    # Reusable dbt SQL macros
 ├── models/
 │   ├── staging/               # Source cleaning and type standardisation
