@@ -49,8 +49,6 @@ Source links:
 - [Traffic accidents involving personal injury](https://andmed.eesti.ee/datasets/inimkannatanutega-liiklusonnetuste-andmed)
 
 
-A detailed description and the reasoning behind each component are available in [docs/architecture.md](docs/architecture.md).
-
 ### Tools
 
 | Responsibility | Technology | Reason for using it |
@@ -130,20 +128,34 @@ Install: Docker Desktop
 
 1. Download the project
 
-2. In terminal (for Windows only):
+```bash 
+git clone https://github.com/MarthaBog/Impact-of-Weather-Conditions-on-Deaths-and-Traffic-Accidents-in-Estonia.git
+cd folder where is downloaded file is
+```
+
+2. Run the project (for Windows only):
 ```bash
 copy .env.example .env
 docker compose up -d db
 docker compose run --rm pipeline  # Run the full data pipeline
 docker compose up -d --build superset
 ```
-3. Open http://localhost:8088  <!-- passwords in .env -->
+
+3. Open Superset
+Open http://localhost:8088  <!-- passwords are stored in .env -->
+
+In Superset:
+**Settings → Database Connections → SQLite → Edit**
+
+Insert SQLAlchemy URL:
+**postgresql+psycopg2://pipeline:XXXXXXXXXX@db:5432/weather_deaths_traffic** - Test connection
 
 4. Import the dashboard:
 Dashboards - Import dashboard - Select the dashboard ZIP file from superset_exports/
 
+5. Stop the project
 ```bash
-docker compose down  # Stop the project
+docker compose down
 ```
 
 ## **Conclusion**
