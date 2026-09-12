@@ -162,7 +162,8 @@ docker compose down
 
 Across all available years (2020–2026), unusual weather conditions were not consistently associated with higher traffic accident counts or higher weekly mortality. Differences between typical and unusual weather varied by month, and the observed associations were not strong or consistent enough to conclude that weather conditions have a strong impact on traffic accidents or mortality.
 
-![Dashboard](dashboard_image.png)
+<img width="3424" height="1143" alt="dashboard_image" src="https://github.com/user-attachments/assets/e953de3e-fa53-4c59-90ee-e39cde31a52d" />
+
 
 ### Privacy and security
 
