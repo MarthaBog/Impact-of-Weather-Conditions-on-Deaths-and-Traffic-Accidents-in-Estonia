@@ -137,11 +137,14 @@ docker compose up -d db
 docker compose run --rm pipeline  # Run the full data pipeline
 docker compose up -d --build superset
 ```
-Open http://localhost:8088  <!-- passwords in .env
+3. Open http://localhost:8088  <!-- passwords in .env -->
 
-Import the dashboard:
+4. Import the dashboard:
 Dashboards - Import dashboard - Select the dashboard ZIP file from superset_exports/
-docker compose down  --- Stop the project
+
+```bash
+docker compose down  # Stop the project
+```
 
 ## **Conclusion**
 
