@@ -1,3 +1,4 @@
+<img width="3424" height="1143" alt="dashboard_image" src="https://github.com/user-attachments/assets/52d8e355-e4e4-4f67-a94b-6324043c33d6" />
 # Ilmastikutingimused, suremus ja liiklusõnnetused Eestis
 
 ## Projekti ülevaade
@@ -165,7 +166,8 @@ docker compose down
 
 Kõigi kättesaadavate aastate (2020–2026) lõikes ei olnud ebatavalised ilmastikutingimused järjepidevalt seotud suurema liiklusõnnetuste arvu ega suurema iganädalase suremusega. Erinevused tavapäraste ja ebatavaliste ilmastikutingimuste vahel varieerusid kuude lõikes ning täheldatud seosed ei olnud piisavalt tugevad ega järjepidevad, et järeldada, et ilmastikutingimustel on tugev mõju liiklusõnnetustele või suremusele.
 
-![Dashboard](dashboard_image.png)
+<img width="3424" height="1143" alt="dashboard_image" src="https://github.com/user-attachments/assets/8127191b-c4dc-460b-aa3f-f3b7e1b2478f" />
+
 
 ### Privaatsus ja turvalisus
 
