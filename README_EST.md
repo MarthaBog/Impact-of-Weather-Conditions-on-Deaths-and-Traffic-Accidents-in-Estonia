@@ -1,4 +1,3 @@
-<img width="3424" height="1143" alt="dashboard_image" src="https://github.com/user-attachments/assets/52d8e355-e4e4-4f67-a94b-6324043c33d6" />
 # Ilmastikutingimused, suremus ja liiklusõnnetused Eestis
 
 ## Projekti ülevaade
